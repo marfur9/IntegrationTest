@@ -14,13 +14,13 @@ import java.text.NumberFormat;
 import java.util.*;
 
 public class TwitterAdapter {
-    Twitter unauthenticatedTwitter = new TwitterFactory().getInstance();
-    long userIDTwitter = 1006463801045200896L; //twitter profile i want to read from
-    Properties prop = new Properties();
-    InputStream input = null;
-    AccessToken accessToken;
-    String[] consumerKeys;
-    Twitter twitter;
+    private Twitter unauthenticatedTwitter = new TwitterFactory().getInstance();
+    private long userIDTwitter = 1006463801045200896L; //twitter profile i want to read from (this is to page @marfur9, ID can be found on http://gettwitterid.com)
+    private Properties prop = new Properties();
+    private InputStream input = null;
+    private AccessToken accessToken;
+    private String[] consumerKeys;
+    private Twitter twitter;
 
     TwitterAdapter(){
         accessToken = setAccessToken();
@@ -29,8 +29,8 @@ public class TwitterAdapter {
         twitter = new TwitterFactory().getInstance(authorization);
     }
 
-    public List<FacebookPage> recentTweetsToFacebookPages(int minutes) { //converts links from tweets from the last xx minutes to FacebookPage objects
-        List<FacebookPage> FBPages = new ArrayList();
+    List<FacebookPage> recentTweetsToFacebookPages(int minutes) { //converts links from tweets from the last xx minutes to FacebookPage objects
+        List<FacebookPage> FBPages = new ArrayList<>();
         List<Status> statuses = getRecentTimeline(userIDTwitter, minutes);
         Iterator<Status> statusIterator = statuses.iterator();
 
@@ -73,7 +73,7 @@ public class TwitterAdapter {
         }
     }
 
-    public String composeTweet(FacebookPage fbPage){
+    private String composeTweet(FacebookPage fbPage){
         String newTweet;
             if (fbPage.getLikeCount() == null) {
                     newTweet = "Could not find " + fbPage.getName() + "s like count";
@@ -85,7 +85,7 @@ public class TwitterAdapter {
     }
 
     private List<Status> getRecentTimeline(Long userID, int minutes) { //returns a list of tweets from the last xx minutes
-        List<Status> statuses = new ArrayList();
+        List<Status> statuses = new ArrayList<>();
         try {
             //Get last 30 tweets from timeline and mentions
             statuses = unauthenticatedTwitter.getUserTimeline(userID);
