@@ -32,10 +32,8 @@ public class TwitterAdapter {
     List<FacebookPage> recentTweetsToFacebookPages(int minutes) { //converts links from tweets from the last xx minutes to FacebookPage objects
         List<FacebookPage> FBPages = new ArrayList<>();
         List<Status> statuses = getRecentTimeline(userIDTwitter, minutes);
-        Iterator<Status> statusIterator = statuses.iterator();
 
-        while (statusIterator.hasNext()) {
-            Status current = statusIterator.next();
+        for (Status current : statuses) {
             URLEntity[] urls = current.getURLEntities();
             if (urls.length != 0) { //does nothing if there is no links
                 for(URLEntity currentURL : urls) {
