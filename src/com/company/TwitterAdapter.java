@@ -92,13 +92,7 @@ public class TwitterAdapter {
             DateTime dateTime = new DateTime().minusMinutes(minutes); //finds the time xx minutes ago
             Date lastHour = dateTime.toDate();
             //remove tweets older than xx minutes from list
-            Iterator<Status> statusIterator = statuses.iterator();
-            while(statusIterator.hasNext()){
-                Status current = statusIterator.next();
-                if(current.getCreatedAt().before(lastHour)){
-                    statusIterator.remove();
-                }
-            }
+            statuses.removeIf(current -> current.getCreatedAt().before(lastHour));
 
         } catch (TwitterException te) {
             te.printStackTrace();
