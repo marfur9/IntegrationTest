@@ -12,6 +12,8 @@ The project will need your twitterID, and different twitter tokens to work.
 
 twitterID can be found on: http://gettwitterid.com
 
+[How to make key/tokens](https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html)
+
 twitter4j.properties file (in project root)
 ```
 debug=true
@@ -20,7 +22,7 @@ oauth.consumerSecret=xxxxxxxxxxxxxxxxx
 oauth.accessToken=xxxxxxxxxxxxxxxxx
 oauth.accessTokenSecret=xxxxxxxxxxxxxxxxx
 ```
-You also need to get a accesstoken from https://developers.facebook.com/tools/explorer/ and put it in config.properties
+You also need to get a access token from https://developers.facebook.com/tools/explorer/ and put it in config.properties
 
 ## Built With
 
