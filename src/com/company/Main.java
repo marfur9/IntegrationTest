@@ -1,25 +1,25 @@
 package com.company;
 
+import twitter4j.TwitterException;
+
 import java.util.List;
 
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TwitterException{
         TwitterAdapter twitterAdapter = new TwitterAdapter();
         FacebookAdapter FBAdapter = new FacebookAdapter();
-        int minutes = 10; //minute interval to check twitter
-        boolean running = true;
+        int minutes = 30; //minute interval to check twitter
 
-        //while (running) {
+        //while (true) {
             List<FacebookPage> FBPages = twitterAdapter.recentTweetsToFacebookPages(minutes);
 
             if (FBPages != null) {
                 for (FacebookPage currentPage : FBPages) {
                     currentPage = FBAdapter.updatePage(currentPage);
                 }
-
-                //twitterAdapter.postRepliesToTwitter(FBPages);
+                    twitterAdapter.postRepliesToTwitter(FBPages);
             } else {
                 System.out.println("no facebook links the last " + minutes + " minutes.");
             }
