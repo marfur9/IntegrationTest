@@ -4,6 +4,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.Version;
+import com.restfb.exception.FacebookOAuthException;
 import com.restfb.types.Page;
 
 import java.io.FileInputStream;
@@ -11,13 +12,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class FacebookAdapter {
+class FacebookAdapter {
 
 
     private final FacebookClient facebookClient;
-    String accessToken;
-    Properties prop = new Properties();
-    InputStream input = null;
+    private String accessToken;
+    private Properties prop = new Properties();
+    private InputStream input = null;
 
 
     FacebookAdapter() {
@@ -25,18 +26,22 @@ public class FacebookAdapter {
         facebookClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_12);
     }
 
-    public FacebookPage updatePage (FacebookPage FBPage){
+    FacebookPage updatePage (FacebookPage FBPage){
         Long likeCount;
         String name;
-        Page page = facebookClient.fetchObject(FBPage.getURL(), Page.class,
-                Parameter.with("fields", "fan_count,name"));
 
-        System.out.println("Page likes: " + page.getFanCount());
+        try {
+            Page page = facebookClient.fetchObject(FBPage.getURL(), Page.class,
+                    Parameter.with("fields", "fan_count,name"));
 
-        likeCount = page.getFanCount();
-        name = page.getName();
-        FBPage.setLikeCount(likeCount);
-        FBPage.setName(name);
+            System.out.println("Page likes: " + page.getFanCount());
+            likeCount = page.getFanCount();
+            name = page.getName();
+            FBPage.setLikeCount(likeCount);
+            FBPage.setName(name);
+        } catch (FacebookOAuthException e){ //not a valid facebook page
+            e.printStackTrace();
+        }
         return FBPage;
     }
 

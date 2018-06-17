@@ -13,7 +13,7 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.util.*;
 
-public class TwitterAdapter {
+class TwitterAdapter {
     private Twitter unauthenticatedTwitter = new TwitterFactory().getInstance();
     private long userIDTwitter = 1006463801045200896L; //twitter profile i want to read from (this is to page @marfur9, ID can be found on http://gettwitterid.com)
     private Properties prop = new Properties();
@@ -60,25 +60,28 @@ public class TwitterAdapter {
         }
     }
 
-    public void postRepliesToTwitter(List<FacebookPage> FBPages){
+    void postRepliesToTwitter(List<FacebookPage> FBPages) throws TwitterException{
         for (FacebookPage current : FBPages){
             String newTweet = composeTweet(current);
-            try{
-                twitter.updateStatus(newTweet);
-            }catch (TwitterException e){
-                System.err.println("Error occurred while posting tweet!");
+            if(newTweet != null) {
+                    twitter.updateStatus(newTweet);
+            } else{
+                System.out.println("Unexpected error while composing tweet");
             }
         }
     }
 
-    private String composeTweet(FacebookPage fbPage){
+    private String composeTweet(FacebookPage fbPage) throws TwitterException{
         String newTweet;
-            if (fbPage.getLikeCount() == null) {
-                    newTweet = "Could not find " + fbPage.getName() + "s like count";
-            } else {
-                    newTweet = "@" + fbPage.getRequester() + " Facebook page " + fbPage.getName() + " has " + NumberFormat.getNumberInstance(Locale.US).format(fbPage.getLikeCount()) + " likes.";
-            }
+        String replyMention = setReplyMention(fbPage.getRequester());
 
+            if (fbPage.getLikeCount() == null && fbPage.getName() != null) { //valid facebook page, but couldn't get like count
+                newTweet = replyMention + " Could not find " + fbPage.getName() + "'s like count";
+            } else if (fbPage.getLikeCount() == null) { //not valid page (maybe a link to a facebook person/app/game)
+                newTweet = replyMention + " The requested url " + fbPage.getURL() + " is not a valid/public facebook page.";
+            } else {
+                newTweet = replyMention + " Facebook page " + fbPage.getName() + " has " + NumberFormat.getNumberInstance(Locale.US).format(fbPage.getLikeCount()) + " likes.";
+            }
         return newTweet;
     }
 
@@ -155,5 +158,14 @@ public class TwitterAdapter {
         return consumerKeys;
     }
 
+    private String setReplyMention(String requester) throws  TwitterException{
+        String replyMention;
+        if(requester.equals(twitter.getScreenName())){
+            replyMention = "";
+        } else{
+            replyMention = "@" + requester;
+        }
+        return replyMention;
+    }
 
 }
