@@ -24,7 +24,7 @@ class TwitterAdapter {
 
         for (Status current : statuses) {
             URLEntity[] urls = current.getURLEntities();
-            if (urls.length != 0) { //does nothing if there is no links
+            if (urls.length != 0) { //does nothing if there is no links in current status
                 for(URLEntity currentURL : urls) {
                     String fullURL = currentURL.getExpandedURL();
                     System.out.println("Full URL found in tweet: " + fullURL);

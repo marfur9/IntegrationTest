@@ -8,9 +8,7 @@ A project made to test integrating different systems (facebook and twitter using
 
 ### Prerequisites
 
-The project will need your twitterID, and different twitter tokens to work.
-
-twitterID can be found on: http://gettwitterid.com
+The project will need 4 different keys/tokens in a root file called "twitter4j.properties" to work.
 
 [How to make key/tokens](https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html)
 

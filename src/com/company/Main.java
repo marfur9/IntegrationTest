@@ -24,11 +24,11 @@ public class Main {
                 System.out.println("no facebook links the last " + minutes + " minutes.");
             }
 
-            try {
+            /*try {
                 Thread.sleep(1000 * 60 * minutes);
             } catch (InterruptedException e) {
                 System.out.println("got interrupted!");
-            }
+            }*/
         //}
     }
 }
