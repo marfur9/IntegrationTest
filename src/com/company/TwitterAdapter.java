@@ -2,36 +2,25 @@ package com.company;
 
 import org.joda.time.DateTime;
 import twitter4j.*;
-import twitter4j.auth.AccessToken;
 import twitter4j.auth.OAuthAuthorization;
 import twitter4j.conf.ConfigurationContext;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.*;
 
 class TwitterAdapter {
-    private Twitter unauthenticatedTwitter = new TwitterFactory().getInstance();
-    private long userIDTwitter = 1006463801045200896L; //twitter profile i want to read from (this is to page @marfur9, ID can be found on http://gettwitterid.com)
-    private Properties prop = new Properties();
-    private InputStream input = null;
-    private AccessToken accessToken;
-    private String[] consumerKeys;
     private Twitter twitter;
 
     TwitterAdapter(){
-        accessToken = setAccessToken();
-        consumerKeys = setConsumerKeys();
         OAuthAuthorization authorization = new OAuthAuthorization(ConfigurationContext.getInstance());
         twitter = new TwitterFactory().getInstance(authorization);
     }
 
     List<FacebookPage> recentTweetsToFacebookPages(int minutes) { //converts links from tweets from the last xx minutes to FacebookPage objects
         List<FacebookPage> FBPages = new ArrayList<>();
-        List<Status> statuses = getRecentTimeline(userIDTwitter, minutes);
+        List<Status> statuses = getRecentTimeline(minutes);
 
         for (Status current : statuses) {
             URLEntity[] urls = current.getURLEntities();
@@ -78,18 +67,18 @@ class TwitterAdapter {
             if (fbPage.getLikeCount() == null && fbPage.getName() != null) { //valid facebook page, but couldn't get like count
                 newTweet = replyMention + " Could not find " + fbPage.getName() + "'s like count";
             } else if (fbPage.getLikeCount() == null) { //not valid page (maybe a link to a facebook person/app/game)
-                newTweet = replyMention + " The requested url " + fbPage.getURL() + " is not a valid/public facebook page.";
+                newTweet = replyMention + " The requested url " + fbPage.getURL() + " is not a valid/public facebook page or something went wrong.";
             } else {
                 newTweet = replyMention + " Facebook page " + fbPage.getName() + " has " + NumberFormat.getNumberInstance(Locale.US).format(fbPage.getLikeCount()) + " likes.";
             }
         return newTweet;
     }
 
-    private List<Status> getRecentTimeline(Long userID, int minutes) { //returns a list of tweets from the last xx minutes
+    private List<Status> getRecentTimeline(int minutes) { //returns a list of tweets from the last xx minutes
         List<Status> statuses = new ArrayList<>();
         try {
             //Get last 30 tweets from timeline and mentions
-            statuses = unauthenticatedTwitter.getUserTimeline(userID);
+            statuses = twitter.getUserTimeline();
             statuses.addAll(twitter.getMentionsTimeline());
             //Find the time/date from xx minutes ago
             DateTime dateTime = new DateTime().minusMinutes(minutes); //finds the time xx minutes ago
@@ -132,32 +121,6 @@ class TwitterAdapter {
         }
     }
 
-    private AccessToken setAccessToken(){
-        try {
-            input = new FileInputStream("twitter4j.properties");
-            prop.load(input);
-            accessToken = new AccessToken(prop.getProperty("oauth.accessToken"), prop.getProperty("oauth.accessTokenSecret"));
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return accessToken;
-    }
-
-    private String[] setConsumerKeys(){
-        String[] consumerKeys = new String[2];
-        try {
-            input = new FileInputStream("twitter4j.properties");
-            prop.load(input);
-            consumerKeys[0] = prop.getProperty("oauth.consumerKey");
-            consumerKeys[1] = prop.getProperty("oauth.consumerSecret");
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return consumerKeys;
-    }
-
     private String setReplyMention(String requester) throws  TwitterException{
         String replyMention;
         if(requester.equals(twitter.getScreenName())){
@@ -167,5 +130,4 @@ class TwitterAdapter {
         }
         return replyMention;
     }
-
 }
