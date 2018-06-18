@@ -10,6 +10,7 @@ import com.restfb.types.Page;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 class FacebookAdapter {
@@ -26,23 +27,25 @@ class FacebookAdapter {
         facebookClient = new DefaultFacebookClient(accessToken, Version.VERSION_2_12);
     }
 
-    FacebookPage updatePage (FacebookPage FBPage){
-        Long likeCount;
-        String name;
+    List<FacebookPage> updatePages (List<FacebookPage> facebookPages){ //finds fan count and name for all Facebook pages in a list and returns it
+        for(FacebookPage current : facebookPages) {
+            Long likeCount;
+            String name;
 
-        try {
-            Page page = facebookClient.fetchObject(FBPage.getURL(), Page.class,
-                    Parameter.with("fields", "fan_count,name"));
+            try {
+                Page page = facebookClient.fetchObject(current.getURL(), Page.class,
+                        Parameter.with("fields", "fan_count,name"));
 
-            System.out.println("Page likes: " + page.getFanCount());
-            likeCount = page.getFanCount();
-            name = page.getName();
-            FBPage.setLikeCount(likeCount);
-            FBPage.setName(name);
-        } catch (FacebookOAuthException e){ //not a valid facebook page
-            e.printStackTrace();
+                System.out.println("Page likes: " + page.getFanCount());
+                likeCount = page.getFanCount();
+                name = page.getName();
+                current.setLikeCount(likeCount);
+                current.setName(name);
+            } catch (FacebookOAuthException e) { //not a valid facebook page
+                e.printStackTrace();
+            }
         }
-        return FBPage;
+        return facebookPages;
     }
 
     private String setAccessToken(){

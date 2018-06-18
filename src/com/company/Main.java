@@ -9,17 +9,15 @@ public class Main {
 
     public static void main(String[] args) throws TwitterException{
         TwitterAdapter twitterAdapter = new TwitterAdapter();
-        FacebookAdapter FBAdapter = new FacebookAdapter();
-        int minutes = 30; //minute interval to check twitter
+        FacebookAdapter facebookAdapter = new FacebookAdapter();
+        int minutes = 300; //minute interval to check twitter
 
         //while (true) {
-            List<FacebookPage> FBPages = twitterAdapter.recentTweetsToFacebookPages(minutes);
+            List<FacebookPage> facebookPages = twitterAdapter.recentTweetsToFacebookPages(minutes);
 
-            if (FBPages != null) {
-                for (FacebookPage currentPage : FBPages) {
-                    currentPage = FBAdapter.updatePage(currentPage);
-                }
-                    twitterAdapter.postRepliesToTwitter(FBPages);
+            if (facebookPages != null) {
+                    facebookPages = facebookAdapter.updatePages(facebookPages);
+                    twitterAdapter.postRepliesToTwitter(facebookPages);
             } else {
                 System.out.println("no facebook links the last " + minutes + " minutes.");
             }
