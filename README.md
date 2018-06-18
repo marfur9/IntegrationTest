@@ -1,6 +1,4 @@
-# Project Title
-
-Integration Test
+# Integration Test
 
 ## Getting Started
 
@@ -20,8 +18,10 @@ oauth.consumerSecret=xxxxxxxxxxxxxxxxx
 oauth.accessToken=xxxxxxxxxxxxxxxxx
 oauth.accessTokenSecret=xxxxxxxxxxxxxxxxx
 ```
-You also need to get a access token from https://developers.facebook.com/tools/explorer/ and put it in config.properties
-
+You also need to get a access token from https://developers.facebook.com/tools/explorer/ and put it in config.properties like this:
+```
+accessToken=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
 ## Built With
 
 * [Twitter4j](http://twitter4j.org/en/) - Unofficial Java library for the Twitter API.

@@ -1,11 +1,11 @@
 <component name="libraryTable">
   <library name="restfb-2.6.0">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Documents/tv2 test/restfb-2.6.0/restfb-2.6.0/restfb-2.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libraries/restfb-2.6.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/Documents/tv2 test/restfb-2.6.0/restfb-2.6.0/restfb-2.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libraries/restfb-2.6.0.jar!/" />
     </SOURCES>
   </library>
 </component>

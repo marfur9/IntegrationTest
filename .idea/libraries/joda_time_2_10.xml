@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="joda-time-2.10">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Documents/tv2 test/joda-time-2.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libraries/joda-time-2.10.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
