@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) throws TwitterException{
         TwitterAdapter twitterAdapter = new TwitterAdapter();
         FacebookAdapter facebookAdapter = new FacebookAdapter();
-        int minutes = 300; //minute interval to check twitter
+        int minutes = 10; //minute interval to check twitter
 
         //while (true) {
             List<FacebookPage> facebookPages = twitterAdapter.recentTweetsToFacebookPages(minutes);

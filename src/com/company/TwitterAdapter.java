@@ -19,7 +19,7 @@ class TwitterAdapter {
     }
 
     List<FacebookPage> recentTweetsToFacebookPages(int minutes) { //converts links from tweets from the last xx minutes to FacebookPage objects
-        List<FacebookPage> FBPages = new ArrayList<>();
+        List<FacebookPage> facebookPages = new ArrayList<>();
         List<Status> statuses = getRecentTimeline(minutes);
 
         for (Status current : statuses) {
@@ -32,7 +32,7 @@ class TwitterAdapter {
                         String pageName = getPageNameFromLink(fullURL);
                         User requester = current.getUser();
                         FacebookPage currentPage = new FacebookPage(pageName, requester.getScreenName());
-                        FBPages.add(currentPage);
+                        facebookPages.add(currentPage);
                         System.out.println("Only the page name/ID from the tweet: " + pageName);
                         System.out.println("Requested by name: " + requester.getName() + " Screen name: " + requester.getScreenName());
                     } else { //if there is a link but it isn't a facebook link
@@ -42,15 +42,15 @@ class TwitterAdapter {
             }
         }
 
-        if (FBPages.isEmpty()) {
+        if (facebookPages.isEmpty()) {
             return null;
         } else {
-            return FBPages;
+            return facebookPages;
         }
     }
 
-    void postRepliesToTwitter(List<FacebookPage> FBPages) throws TwitterException{
-        for (FacebookPage current : FBPages){
+    void postRepliesToTwitter(List<FacebookPage> facebookPages) throws TwitterException{
+        for (FacebookPage current : facebookPages){
             String newTweet = composeTweet(current);
             if(newTweet != null) {
                     twitter.updateStatus(newTweet);
@@ -60,16 +60,16 @@ class TwitterAdapter {
         }
     }
 
-    private String composeTweet(FacebookPage fbPage) throws TwitterException{
+    private String composeTweet(FacebookPage facebookPage) throws TwitterException{
         String newTweet;
-        String replyMention = setReplyMention(fbPage.getRequester());
+        String replyMention = setReplyMention(facebookPage.getRequester());
 
-            if (fbPage.getLikeCount() == null && fbPage.getName() != null) { //valid facebook page, but couldn't get like count
-                newTweet = replyMention + " Could not find " + fbPage.getName() + "'s like count";
-            } else if (fbPage.getLikeCount() == null) { //not valid page (maybe a link to a facebook person/app/game)
-                newTweet = replyMention + " The requested url " + fbPage.getURL() + " is not a valid/public facebook page or something went wrong.";
+            if (facebookPage.getLikeCount() == null && facebookPage.getName() != null) { //valid facebook page, but couldn't get like count
+                newTweet = replyMention + " Could not find " + facebookPage.getName() + "'s like count";
+            } else if (facebookPage.getLikeCount() == null) { //not valid page (maybe a link to a facebook person/app/game)
+                newTweet = replyMention + " The requested url " + facebookPage.getURL() + " is not a valid/public facebook page or something went wrong.";
             } else {
-                newTweet = replyMention + " Facebook page " + fbPage.getName() + " has " + NumberFormat.getNumberInstance(Locale.US).format(fbPage.getLikeCount()) + " likes.";
+                newTweet = replyMention + " Facebook page " + facebookPage.getName() + " has " + NumberFormat.getNumberInstance(Locale.US).format(facebookPage.getLikeCount()) + " likes.";
             }
         return newTweet;
     }
